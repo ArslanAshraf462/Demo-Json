@@ -5,6 +5,7 @@ import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -77,6 +78,32 @@ class MainActivity : AppCompatActivity() {
             cancelProgressDialog()
             if (result != null) {
                 Log.i("JSON RESPONSE RESULT", result)
+            }
+            val jsonObject = JSONObject(result)
+            val message = jsonObject.optString("message")
+            Log.i("Message", message)
+            val userId = jsonObject.optString("user_id")
+            Log.i("User Id", "$userId")
+            val name = jsonObject.optString("name")
+            Log.i("Name", "$name")
+
+            val profileDetailsObject = jsonObject.optJSONObject("profile_details")
+            val isProfileCompleted = profileDetailsObject.optBoolean("is_profile_completed")
+            Log.i("is Profile Completed", "$isProfileCompleted")
+
+            val dataListArray = jsonObject.optJSONArray("data_list")
+            Log.i("Data List Size", "${dataListArray.length()}")
+
+            for (item in 0 until dataListArray.length()){
+               Log.i("Value $item", "${dataListArray[item]}")
+
+               val dataItemObject : JSONObject = dataListArray[item] as JSONObject
+
+                val id = dataItemObject.optInt("id")
+                Log.i("ID","$id")
+
+                val value = dataItemObject.optString("value")
+                Log.i("Value","$value")
             }
         }
 
